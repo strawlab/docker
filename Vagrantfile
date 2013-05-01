@@ -6,6 +6,7 @@ def v10(config)
   config.vm.box_url = 'http://files.vagrantup.com/precise64.box'
 
   # Install ubuntu packaging dependencies and create ubuntu packages
+  config.vm.provision :shell, :inline => "sudo apt-get install -y linux-image-extra-`uname -r` || echo 'not on AWS'"
   config.vm.provision :shell, :inline => "echo 'deb http://ppa.launchpad.net/dotcloud/lxc-docker/ubuntu precise main' >>/etc/apt/sources.list"
   config.vm.provision :shell, :inline => 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get install -qq -y --force-yes lxc-docker'
 end
@@ -26,6 +27,7 @@ Vagrant::VERSION >= "1.1.0" and Vagrant.configure("2") do |config|
     aws.secret_access_key =     ENV["AWS_SECRET_ACCESS_KEY"]
     aws.keypair_name = ENV["AWS_KEYPAIR_NAME"]
     aws.ssh_private_key_path = ENV["AWS_SSH_PRIVKEY"]
+    aws.security_groups = ENV['AWS_SECURITY_GROUPS']
     aws.region = "us-east-1"
     aws.ami = "ami-d0f89fb9"
     aws.ssh_username = "ubuntu"
@@ -57,6 +59,7 @@ Vagrant::VERSION >= "1.2.0" and Vagrant.configure("2") do |config|
     aws.secret_access_key = ENV["AWS_SECRET_ACCESS_KEY"]
     aws.keypair_name = ENV["AWS_KEYPAIR_NAME"]
     override.ssh.private_key_path = ENV["AWS_SSH_PRIVKEY"]
+    aws.security_groups = ENV['AWS_SECURITY_GROUPS']
     override.ssh.username = "ubuntu"
     aws.region = "us-east-1"
     aws.ami = "ami-d0f89fb9"

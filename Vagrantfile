@@ -6,9 +6,11 @@ def v10(config)
   config.vm.box_url = 'http://files.vagrantup.com/precise64.box'
 
   # Install ubuntu packaging dependencies and create ubuntu packages
-  config.vm.provision :shell, :inline => "sudo apt-get install -y linux-image-extra-`uname -r` || echo 'not on AWS'"
-  config.vm.provision :shell, :inline => "echo 'deb http://ppa.launchpad.net/dotcloud/lxc-docker/ubuntu precise main' >>/etc/apt/sources.list"
-  config.vm.provision :shell, :inline => 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get install -qq -y --force-yes lxc-docker'
+  config.vm.provision :shell, :inline => "sudo apt-get -qq install -y linux-image-extra-`uname -r` || echo 'not on AWS'"
+  config.vm.provision :shell, :inline => "sudo apt-get -qq update"
+  config.vm.provision :shell, :inline => "sudo apt-get -qq install -y python-software-properties"
+  config.vm.provision :shell, :inline => "sudo add-apt-repository -y ppa:dotcloud/lxc-docker"
+  config.vm.provision :shell, :inline => 'export DEBIAN_FRONTEND=noninteractive; apt-get -qq update; apt-get -qq install -y lxc-docker'
 end
 
 Vagrant::VERSION < "1.1.0" and Vagrant::Config.run do |config|
